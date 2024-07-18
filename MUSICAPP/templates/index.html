@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        ul li {
+            background: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        ul li p {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        audio {
+            width: 100%;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #4facfe;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #00f2fe;
+        }
+
+        p a {
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Home</h1>
+    {% if current_user.is_authenticated %}
+        <h2>Songs</h2>
+        <ul>
+            {% for song in songs %}
+                <li>
+                    <p>{{ song.title }} by {{ song.artist }}</p>
+                    <audio controls>
+                        <source src="{{ url_for('uploaded_file', filename=song.filename) }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </li>
+            {% endfor %}
+        </ul>
+        <h2>Playlists</h2>
+        <ul>
+            {% for playlist in playlists %}
+                <li><a href="{{ url_for('playlist', playlist_id=playlist.id) }}">{{ playlist.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('upload') }}">Upload a new song</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a></p>
+    {% endif %}
+</body>
+</html>
